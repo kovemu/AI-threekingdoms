@@ -1,0 +1,18 @@
+{
+  "text": {
+    "id": "default-roleplay-model",
+    "format": "gguf",
+    "url": "",
+    "sha256": "",
+    "minimumRamGb": 16,
+    "recommendedVramGb": 10,
+    "notes": "Do not commit a large model into git. Shipping build downloads/verifies it automatically."
+  },
+  "image": {
+    "id": "default-scene-model",
+    "enabledByDefault": false,
+    "url": "",
+    "sha256": "",
+    "notes": "Optional local scene generator. Gameplay must continue without it."
+  }
+}
