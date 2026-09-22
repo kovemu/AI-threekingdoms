@@ -61,12 +61,15 @@ Do NOT make a paid API part of the required path.
 Do NOT depend on a separately installed Ollama daemon.
 Optional cloud adapters can exist later but must never be required.
 
-Development target hardware for the first high-quality profile:
+Development/shipping target hardware:
 - Windows
-- RTX 3060 12GB
-- 32GB RAM
+- 8GB VRAM GPU as the primary target
+- 16GB system RAM minimum
+- 32GB system RAM recommended
 
-Design lower-tier fallbacks as described in `docs/LOCAL_AI.md`.
+Optimize the default local text model around a 7B-9B Q4-class GGUF model. Do not assume 12GB+ VRAM. Design lower-tier fallbacks as described in `docs/LOCAL_AI.md`.
+
+For 8GB GPUs, image generation must not jeopardize text gameplay. Prefer STATE_BOARD by default and use local SCENE generation only when memory can be safely freed/reallocated.
 
 ## Image generation
 
