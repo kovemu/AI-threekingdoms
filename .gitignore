@@ -1,0 +1,14 @@
+node_modules/
+dist/
+target/
+.vite/
+.env
+.env.*
+!.env.example
+*.gguf
+*.safetensors
+models/
+generated/
+*.sqlite
+*.sqlite3
+.DS_Store
