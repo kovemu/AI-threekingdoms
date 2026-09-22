@@ -5,14 +5,14 @@
     "url": "",
     "sha256": "",
     "minimumRamGb": 16,
-    "recommendedVramGb": 10,
-    "notes": "Do not commit a large model into git. Shipping build downloads/verifies it automatically."
+    "recommendedVramGb": 8,
+    "notes": "Primary shipping target is 8GB VRAM. Default profile should use a 7B-9B Q4-class GGUF model. Do not commit large models into git; the shipping build downloads and verifies them automatically."
   },
   "image": {
     "id": "default-scene-model",
     "enabledByDefault": false,
     "url": "",
     "sha256": "",
-    "notes": "Optional local scene generator. Gameplay must continue without it."
+    "notes": "Optional local scene generator. On constrained 8GB GPUs, gameplay must fall back to deterministic STATE_BOARD or lightweight/prebuilt scene art without blocking text play."
   }
 }
