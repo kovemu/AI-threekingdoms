@@ -24,6 +24,10 @@ see that internal secret and no external inference service is used.
 - Initial Windows CI passed: NSIS installer, real 4B CPU model automatic download,
   verification, Korean inference and restart. Run: https://github.com/kovemu/AI-threekingdoms/actions/runs/35814760811
   The 170.71-second smoke duration includes download and two loads, not per-turn latency.
+- The second Windows run built successfully but exposed an interpreter prompt defect:
+  JSON grammar was supplied to llama.cpp without teaching the model the operation fields.
+  The model chose invalid event resolutions; rule validation rejects those IDs. The prompt
+  now includes its exact output schema and a generic reinforcement/march example.
 - The final Windows workflow additionally checks the production JSON-schema interpreter
   against the supplied troop-transfer/march example; see its run result before acceptance.
 - Interactive GUI: not yet verified. Local browser startup failed; the connected cloud

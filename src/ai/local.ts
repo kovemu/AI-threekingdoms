@@ -31,7 +31,12 @@ Capture requires player's troops already there and no other faction's troops. Ar
 Military battle/conflict/siege events cannot be resolved by this interpreter.
 create_event only diplomacy/court/travel/feast/rumor, unique snake_case id; event text is not a fact-changing operation.
 Questions, speech and unsupported actions: operations=[]; explain in summary. Never guess an unsupported action.
-At most 12 operations. Summary must be concise Korean.`;
+At most 12 operations. Summary must be concise Korean.
+Each operation's type is the action name, NOT an eventId. resolve_event only ends an existing non-military event with its actual ID.
+Example output for reinforcing army_b from army_a by 1000, then marching to city_c:
+{"summary":"병력을 보충한 뒤 출발한다.","operations":[{"type":"transfer_troops","fromArmyId":"army_a","toArmyId":"army_b","amount":1000},{"type":"move_army","armyId":"army_b","toLocationId":"city_c"}]}
+These example IDs are placeholders: use ONLY actual IDs from the supplied world.
+Required output JSON schema: ${JSON.stringify(proposalSchema)}`;
 export class LocalTextProvider implements TextAIProvider {
   private complete:(request:CompletionRequest)=>Promise<string>;
   constructor(complete:(request:CompletionRequest)=>Promise<string>) {this.complete=complete;}

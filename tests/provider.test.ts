@@ -18,6 +18,9 @@ test('local provider requests structured JSON and validates rather than accepts 
   const result=await ai.interpretPlayerAction('안녕',initialScenario());
   assert.deepEqual(result.operations,[]);
   assert.ok(requests[0].jsonSchema);
+  // llama.cpp constrains tokens with json_schema but does not teach the model its fields.
+  const messages=requests[0].messages as {role:string;content:string}[];
+  assert.ok(messages[0].content.includes(JSON.stringify(requests[0].jsonSchema)));
   const bad=new LocalTextProvider(async()=>'{"summary":"x","operations":[],"state":{}}');
   await assert.rejects(()=>bad.interpretPlayerAction('안녕',initialScenario()));
 });
