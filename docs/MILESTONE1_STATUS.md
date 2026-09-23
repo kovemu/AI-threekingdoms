@@ -33,6 +33,10 @@ see that internal secret and no external inference service is used.
   army commands to owned armies and same-location transfer pairs. Rules still validate
   every operation. One failed CPU interpretation took about 159 seconds on CI, so the CPU
   request deadline is 300 seconds and the planning latency range has been revised upward.
+- The fourth run selected the correct armies but confused requested total with additional
+  troops. The interpreter wire response now starts with a short allocation assessment
+  before operations, so it can establish current/target/delta before emitting an amount.
+  That model note is discarded; it never updates state or supplies canonical narration.
 - The final Windows workflow additionally checks the production JSON-schema interpreter
   against the supplied troop-transfer/march example; see its run result before acceptance.
 - Interactive GUI: not yet verified. Local browser startup failed; the connected cloud

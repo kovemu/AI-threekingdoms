@@ -14,9 +14,10 @@ test('projection includes referenced remote characters but excludes unrelated di
 });
 test('local provider requests structured JSON and validates rather than accepts state replacement',async()=>{
   const requests:Record<string,unknown>[]=[];
-  const ai=new LocalTextProvider(async r=>{requests.push(r);return '{"summary":"대화","operations":[]}';});
+  const ai=new LocalTextProvider(async r=>{requests.push(r);return '{"assessment":"untrusted allocation note","summary":"대화","operations":[]}';});
   const result=await ai.interpretPlayerAction('안녕',initialScenario());
   assert.deepEqual(result.operations,[]);
+  assert.ok(!('assessment' in result));
   assert.ok(requests[0].jsonSchema);
   // llama.cpp constrains tokens with json_schema but does not teach the model its fields.
   const messages=requests[0].messages as {role:string;content:string}[];
