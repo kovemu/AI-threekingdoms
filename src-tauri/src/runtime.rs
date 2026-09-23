@@ -110,7 +110,8 @@ impl Running {
         let client = reqwest::Client::builder()
             .no_proxy()
             .connect_timeout(Duration::from_secs(2))
-            .timeout(Duration::from_secs(180))
+            // CPU prompt processing can exceed two minutes on a small Windows VM.
+            .timeout(Duration::from_secs(if gpu { 180 } else { 300 }))
             .redirect(reqwest::redirect::Policy::none())
             .build()
             .map_err(|e| e.to_string())?;

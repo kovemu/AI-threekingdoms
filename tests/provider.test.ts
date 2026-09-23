@@ -31,3 +31,15 @@ test('narrator uses validated result and never proposal summary as fact',async()
   assert.equal(await ai.narrate({stateBefore:s,stateAfter:s,playerInput:'한중 점령!',resolvedSummary:'점령하지 못했다.'}),'장비가 명을 기다린다.');
   assert.ok(content.includes('점령하지 못했다.'));
 });
+test('interpreter grammar limits army commands to owned armies and joins commander names',async()=>{
+  const ai=new LocalTextProvider(async r=>{
+    const schema=r.jsonSchema as any;
+    const move=schema.properties.operations.items.oneOf.find((o:any)=>o.properties.type.const==='move_army');
+    assert.deepEqual(move.properties.armyId.enum,['garrison','zhang_army','huang_army']);
+    const world=JSON.parse(r.messages[1].content).world;
+    assert.equal(world.commandableArmies.find((a:any)=>a.id==='zhang_army').commanderName,'장비');
+    assert.deepEqual(world.commandableArmies.find((a:any)=>a.id==='zhang_army').reinforcementSources,[{id:'garrison',troops:5000}]);
+    return '{"summary":"대화","operations":[]}';
+  });
+  await ai.interpretPlayerAction('장비와 한중',initialScenario());
+});

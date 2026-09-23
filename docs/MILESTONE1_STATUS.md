@@ -15,7 +15,7 @@ see that internal secret and no external inference service is used.
 
 ## Verification evidence
 
-- TypeScript: 23 automated tests passing (validation, rollback, invalid IDs/counts,
+- TypeScript: 24 automated tests passing (validation, rollback, invalid IDs/counts,
   faction authority, commander synchronization, concurrent turns, isolated AI inputs,
   narration/save/visual failures, compact prompts, narrative recovery).
 - Frontend: `npm run typecheck` and `npm run build` passing.
@@ -28,6 +28,11 @@ see that internal secret and no external inference service is used.
   JSON grammar was supplied to llama.cpp without teaching the model the operation fields.
   The model chose invalid event resolutions; rule validation rejects those IDs. The prompt
   now includes its exact output schema and a generic reinforcement/march example.
+- The third run exposed army identity confusion despite valid JSON. Compact projections
+  now join commander names and reinforcement sources, while dynamic grammar restricts
+  army commands to owned armies and same-location transfer pairs. Rules still validate
+  every operation. One failed CPU interpretation took about 159 seconds on CI, so the CPU
+  request deadline is 300 seconds and the planning latency range has been revised upward.
 - The final Windows workflow additionally checks the production JSON-schema interpreter
   against the supplied troop-transfer/march example; see its run result before acceptance.
 - Interactive GUI: not yet verified. Local browser startup failed; the connected cloud
@@ -41,7 +46,7 @@ see that internal secret and no external inference service is used.
 | Profile | Download | Expected VRAM | Expected application RAM | Warm whole-turn latency |
 | --- | ---: | ---: | ---: | ---: |
 | Qwen3-8B Q4_K_M, GPU | 5.03GB (4.68GiB) | about 6–7.5GB | about 6–10GB | provisional 10–35 seconds |
-| Qwen3-4B Q4_K_M, CPU | 2.50GB (2.33GiB) | little beyond display | about 4–7GB | provisional 30–120+ seconds |
+| Qwen3-4B Q4_K_M, CPU | 2.50GB (2.33GiB) | little beyond display | about 4–7GB | provisional 60–300+ seconds |
 
 The estimates assume a compact scenario projection and short narration; actual latency
 varies by GPU bandwidth, CPU, input length, background GPU load and prompt processing.
