@@ -23,6 +23,7 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run typecheck
+      - run: node --experimental-strip-types scripts/generate-smoke.ts
       - run: cargo test --manifest-path src-tauri/Cargo.toml --no-default-features --locked
       - run: npm run desktop:build -- --bundles nsis
       - uses: actions/upload-artifact@v4

@@ -1,7 +1,13 @@
 import type { WorldState } from "../core/types";
 import type { ProposedTurn } from "../core/operations";
 
+export interface NarrativeMemory {
+  player: string;
+  narrator: string;
+}
+
 export interface NarrativeContext {
+  recentNarrative?: NarrativeMemory[];
   stateBefore: WorldState;
   stateAfter: WorldState;
   playerInput: string;
@@ -18,7 +24,8 @@ export interface VisualDecision {
 export interface TextAIProvider {
   interpretPlayerAction(
     input: string,
-    state: WorldState
+    state: WorldState,
+    recentNarrative?: NarrativeMemory[]
   ): Promise<ProposedTurn>;
 
   narrate(context: NarrativeContext): Promise<string>;

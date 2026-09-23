@@ -51,3 +51,12 @@ test('visual failure does not block saving a valid turn',async()=>{
   const {engine}=setup({...provider,chooseVisual:async()=>{throw new Error('visual failed');}});
   assert.equal((await engine.submit('진군')).visual.mode,'STATE_BOARD');
 });
+
+test('restored narrative context is bounded and isolated from factual state',async()=>{
+  let recent:unknown;
+  const {engine}=setup({...provider,narrate:async c=>{recent=c.recentNarrative;return '나는 약속을 기억한다.';}});
+  await engine.submit('기억해라');
+  const restored=new TurnEngine(engine.snapshot(),{...provider,narrate:async c=>{recent=c.recentNarrative;return '약속을 기억하고 있다.';}},{commit:async()=>{}});
+  await restored.submit('무슨 말을 했지?');
+  assert.deepEqual(recent,[{player:'기억해라',narrator:'나는 약속을 기억한다.'}]);
+});

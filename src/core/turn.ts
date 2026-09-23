@@ -22,11 +22,12 @@ export class TurnEngine {
     this.busy=true;
     try {
       const before=structuredClone(this.save.state);
-      const proposed=parseProposal(await this.ai.interpretPlayerAction(input,structuredClone(before)));
+      const recentNarrative=this.save.turns.slice(-3).map(t=>({player:t.input.slice(0,200),narrator:t.narration.slice(0,350)}));
+      const proposed=parseProposal(await this.ai.interpretPlayerAction(input,structuredClone(before),structuredClone(recentNarrative)));
       const draft=applyOperations(before,proposed.operations);
       const number=this.save.version+1;
       const resolved=consequences(before,draft,proposed.operations,number);
-      const context={stateBefore:before,stateAfter:resolved.state,playerInput:input,resolvedSummary:resolved.summary};
+      const context={stateBefore:before,stateAfter:resolved.state,playerInput:input,resolvedSummary:resolved.summary,recentNarrative};
       const narration=await this.ai.narrate(structuredClone(context));
       if(!narration.trim()||narration.length>12000)throw new Error('AI 응답이 비어 있거나 너무 깁니다. 다시 시도해 주세요.');
       let requestedVisual:VisualDecision={mode:'STATE_BOARD',importance:1,reason:'시각화 기본값'};
