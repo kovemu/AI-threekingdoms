@@ -12,3 +12,6 @@ generated/
 *.sqlite
 *.sqlite3
 .DS_Store
+.tools/
+*.sqlite-wal
+*.sqlite-shm

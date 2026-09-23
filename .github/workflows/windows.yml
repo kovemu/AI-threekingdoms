@@ -1,0 +1,34 @@
+name: Windows MVP
+on:
+  push:
+    branches: [main, 'feat/**']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      - run: npm ci
+      - run: npm test
+      - run: npm run typecheck
+      - run: cargo test --manifest-path src-tauri/Cargo.toml --no-default-features --locked
+      - run: npm run desktop:build -- --bundles nsis
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ai-threekingdoms-windows-x64
+          path: src-tauri/target/release/bundle/nsis/*-setup.exe
+          if-no-files-found: error
+      - name: Managed local AI clean-start and restart smoke test (CPU fallback)
+        run: cargo test --manifest-path src-tauri/Cargo.toml --no-default-features managed_runtime_smoke -- --ignored --nocapture
